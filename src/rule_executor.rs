@@ -149,7 +149,26 @@ impl RuleExecutor {
                     file: file.clone(),
                     err,
                 })?;
-        self.load(&module_name, Some(module_code)).await
+
+        // 1. load the module
+        self.load(&module_name, Some(module_code)).await?;
+
+        // 2. execute a shim
+        self.runtime
+            .execute_script(
+                "<loader_shim>",
+                &include_str!("loader.js").replace("{MODULE_PATH}", &module_name),
+            )
+            .map_err(RuleExecutorError::DenoExecutionError)?;
+
+        self.runtime.run_event_loop(false).await.map_err(|reason| {
+            RuleExecutorError::ModuleEvaluationError {
+                module_name: module_name.to_string(),
+                reason,
+            }
+        })?;
+
+        Ok(())
     }
 
     pub async fn load(

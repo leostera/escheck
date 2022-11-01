@@ -8,7 +8,8 @@
 // Rule Definition
 //------------------------------------------------------------------------------
 
-EsCheck.Rule.new({
+/** @type {import('../shared/types').Rule} */
+export default {
     meta: {
         type: "suggestion",
 
@@ -60,4 +61,4 @@ EsCheck.Rule.new({
             }
         };
     }
-});
+};

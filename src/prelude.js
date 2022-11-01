@@ -1,6 +1,10 @@
 const ffi = (name, args) => Deno.core.opSync(name, args);
 
-const panic = x => {
+const panic = async (x) => {
+  if (x.then !== undefined) {
+    x = await x
+  }
+
 	if (typeof x === "object") {
 		x = JSON.stringify(x, null, 2);
 	}
