@@ -26,5 +26,7 @@ async fn main() -> Result<(), anyhow::Error> {
         println!("{}\n", &docs.description);
     }
 
+    println!("Imported {} rules", args.len());
+
     Ok(())
 }

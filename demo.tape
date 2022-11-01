@@ -9,7 +9,7 @@ Enter
 
 Sleep 500ms
 
-Type "escheck ./src/rules/*.js"
+Type "time escheck ./src/rules/*.js"
 Enter
 
 Sleep 5s
