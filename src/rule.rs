@@ -49,19 +49,19 @@ pub enum RuleFixability {
 #[serde(rename_all = "camelCase")]
 pub struct Docs {
     #[serde(default)]
-    description: String,
+    pub description: String,
 
     #[serde(default)]
-    recommended: bool,
+    pub recommended: bool,
 
     #[serde(default)]
-    url: Option<url::Url>,
+    pub url: Option<url::Url>,
 }
 
 #[derive(Debug)]
 pub struct Schema {
     raw: serde_json::Value,
-    schema: JSONSchema,
+    pub schema: JSONSchema,
 }
 
 impl Schema {
@@ -116,31 +116,32 @@ impl Serialize for Schema {
 #[serde(rename_all = "camelCase")]
 pub struct Meta {
     #[serde(rename = "type")]
-    type_: RuleType,
+    pub kind: RuleType,
 
     #[serde(default)]
-    docs: Option<Docs>,
+    pub docs: Option<Docs>,
 
     #[serde(default)]
-    fixable: Option<RuleFixability>,
+    pub fixable: Option<RuleFixability>,
 
     #[serde(default)]
-    has_suggestions: bool,
+    pub has_suggestions: bool,
 
     #[serde(default)]
-    deprecated: bool,
+    pub deprecated: bool,
 
     #[serde(default)]
-    schema: Vec<Schema>,
+    pub schema: Vec<Schema>,
 
     #[serde(default)]
-    replaced_by: Vec<RuleName>,
+    pub replaced_by: Vec<RuleName>,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Rule {
-    meta: Meta,
+    pub name: String,
+    pub meta: Meta,
 }
 
 #[cfg(test)]

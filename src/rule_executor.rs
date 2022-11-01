@@ -9,6 +9,7 @@ use deno_core::ModuleSource;
 use deno_core::ModuleSourceFuture;
 use deno_core::ModuleSpecifier;
 use deno_core::ModuleType;
+use std::path::Path;
 use std::path::PathBuf;
 use std::pin::Pin;
 use std::rc::Rc;
@@ -140,13 +141,13 @@ impl RuleExecutor {
         Ok(rule_executor)
     }
 
-    pub async fn load_file(&mut self, file: PathBuf) -> Result<(), RuleExecutorError> {
+    pub async fn load_file(&mut self, file: &Path) -> Result<(), RuleExecutorError> {
         let module_name = format!("file://{}", file.to_str().unwrap());
         let module_code =
             fs::read_to_string(&file)
                 .await
                 .map_err(|err| RuleExecutorError::CouldNotReadFile {
-                    file: file.clone(),
+                    file: file.to_path_buf(),
                     err,
                 })?;
 
@@ -157,7 +158,9 @@ impl RuleExecutor {
         self.runtime
             .execute_script(
                 "<loader_shim>",
-                &include_str!("loader.js").replace("{MODULE_PATH}", &module_name),
+                &include_str!("loader.js")
+                    .replace("{RULE_NAME}", &file.file_name().unwrap().to_string_lossy())
+                    .replace("{MODULE_PATH}", &module_name),
             )
             .map_err(RuleExecutorError::DenoExecutionError)?;
 

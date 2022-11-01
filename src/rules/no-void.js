@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 /** @type {import('../shared/types').Rule} */
-export default {
+export default  {
     meta: {
         type: "suggestion",
 
